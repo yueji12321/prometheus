@@ -26,19 +26,19 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/Azure/go-autorest/autorest/azure"
-
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 	config_util "github.com/prometheus/common/config"
 	"github.com/prometheus/common/model"
-
 	"github.com/prometheus/prometheus/discovery/targetgroup"
 	"github.com/prometheus/prometheus/util/strutil"
 )
 
 const (
 	azureLabel                     = model.MetaLabelPrefix + "azure_"
+	azureLabelSubscriptionID       = azureLabel + "subscription_id"
+	azureLabelTenantID             = azureLabel + "tenant_id"
 	azureLabelMachineID            = azureLabel + "machine_id"
 	azureLabelMachineResourceGroup = azureLabel + "machine_resource_group"
 	azureLabelMachineName          = azureLabel + "machine_name"
@@ -313,6 +313,8 @@ func (d *Discovery) refresh() (tg *targetgroup.Group, err error) {
 			}
 
 			labels := model.LabelSet{
+				azureLabelSubscriptionID:       model.LabelValue(d.cfg.SubscriptionID),
+				azureLabelTenantID:             model.LabelValue(d.cfg.TenantID),
 				azureLabelMachineID:            model.LabelValue(vm.ID),
 				azureLabelMachineName:          model.LabelValue(vm.Name),
 				azureLabelMachineOSType:        model.LabelValue(vm.OsType),
